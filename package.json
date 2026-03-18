@@ -12,12 +12,16 @@
     "electron:dev": "vite build && electron .",
     "electron:build": "vite build && electron-builder --mac",
     "electron:build:dmg": "vite build && electron-builder --mac dmg",
-    "electron:build:win": "vite build && electron-builder --win"
+    "electron:build:win": "vite build && electron-builder --win",
+    "electron:build:all": "vite build && electron-builder --mac --win"
   },
   "build": {
     "appId": "ai.higgsfield.open",
     "productName": "Open Higgsfield AI",
     "copyright": "Copyright © 2025",
+    "directories": {
+      "output": "release"
+    },
     "files": [
       "dist/**/*",
       "electron/**/*"

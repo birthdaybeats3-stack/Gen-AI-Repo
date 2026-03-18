@@ -2,6 +2,23 @@
 
 > **The free, open-source alternative to Higgsfield AI.** Generate AI images and videos using 200+ state-of-the-art models — without the closed ecosystem or subscription fees.
 
+## ⬇️ Download Desktop App
+
+One-click installers — no Node.js or terminal required.
+
+| Platform | Download |
+|---|---|
+| macOS Apple Silicon (M1/M2/M3/M4) | [Open Higgsfield AI-1.0.0-arm64.dmg](https://github.com/Anil-matcha/Open-Higgsfield-AI/releases/download/v1.0.0/Open.Higgsfield.AI-1.0.0-arm64.dmg) |
+| macOS Intel (x64) | [Open Higgsfield AI-1.0.0.dmg](https://github.com/Anil-matcha/Open-Higgsfield-AI/releases/download/v1.0.0/Open.Higgsfield.AI-1.0.0.dmg) |
+| Windows (x64 + ARM64) | [Open Higgsfield AI Setup 1.0.0.exe](https://github.com/Anil-matcha/Open-Higgsfield-AI/releases/download/v1.0.0/Open.Higgsfield.AI.Setup.1.0.0.exe) |
+
+> **macOS:** If you see an "unidentified developer" warning, right-click the app → **Open**.
+> **Windows:** If SmartScreen warns, click **More info → Run anyway**.
+
+All releases: [github.com/Anil-matcha/Open-Higgsfield-AI/releases](https://github.com/Anil-matcha/Open-Higgsfield-AI/releases)
+
+---
+
 Open Higgsfield AI is an open-source AI image, video, cinema, and lip sync studio that brings Higgsfield-style creative workflows to everyone. Powered by [Muapi.ai](https://muapi.ai), it supports text-to-image, image-to-image, text-to-video, image-to-video, and audio-driven lip sync generation across models like Flux, Nano Banana, Midjourney, Kling, Sora, Veo, Seedream, Infinite Talk, LTX Lipsync, Wan 2.2, and more — all from a sleek, modern interface you can self-host and customize.
 
 **Why Open Higgsfield AI instead of Higgsfield AI?**
@@ -183,6 +200,23 @@ Open `http://localhost:5173` in your browser. You'll be prompted to enter your M
 npm run build
 npm run preview
 ```
+
+### Desktop App Build
+
+Build native desktop apps with Electron:
+
+```bash
+# macOS (DMG — Intel + Apple Silicon)
+npm run electron:build
+
+# Windows (NSIS installer — x64 + ARM64)
+npm run electron:build:win
+
+# Both platforms in one pass
+npm run electron:build:all
+```
+
+Installers are output to the `release/` folder. Pre-built binaries are also available on the [Releases page](https://github.com/Anil-matcha/Open-Higgsfield-AI/releases).
 
 ## 🏗️ Architecture
 
