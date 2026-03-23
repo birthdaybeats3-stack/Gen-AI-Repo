@@ -174,18 +174,6 @@ function ControlBtn({ icon, label, onClick, style }) {
 // ── Dropdown panel ─────────────────────────────────────────────────────────────
 // Rendered inside a `relative` wrapper div; floats above the anchor button.
 
-function DropdownPanel({ type, open, onClose, children }) {
-    const isModel = type === 'model';
-
-    return (
-        <div
-            onClick={e => e.stopPropagation()}
-            className={`absolute bottom-[calc(100%+8px)] left-0 z-50 transition-all origin-bottom-left glass rounded-3xl p-3 shadow-4xl border border-white/10 flex flex-col ${isModel ? 'w-[calc(100vw-3rem)] max-w-xs' : 'w-52 max-w-[240px]'} ${open ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
-        >
-            {children}
-        </div>
-    );
-}
 
 // ── Main component ────────────────────────────────────────────────────────────
 
@@ -242,12 +230,7 @@ export default function VideoStudio({ apiKey, onGenerationComplete, historyItems
     // ── refs ──
     const containerRef = useRef(null);
     const textareaRef = useRef(null);
-    const modelBtnRef = useRef(null);
-    const arBtnRef = useRef(null);
-    const durationBtnRef = useRef(null);
-    const resolutionBtnRef = useRef(null);
-    const qualityBtnRef = useRef(null);
-    const modeBtnRef = useRef(null);
+    const dropdownRef = useRef(null);
     const imageFileInputRef = useRef(null);
     const videoFileInputRef = useRef(null);
     const resultVideoRef = useRef(null);
@@ -319,9 +302,9 @@ export default function VideoStudio({ apiKey, onGenerationComplete, historyItems
     useEffect(() => {
         if (!openDropdown) return;
         const handler = (e) => {
-            const isInsideDropdown = [modelBtnRef, arBtnRef, durationBtnRef, resolutionBtnRef, qualityBtnRef, modeBtnRef]
-                .some(ref => ref.current && ref.current.contains(e.target));
-            if (!isInsideDropdown) setOpenDropdown(null);
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOpenDropdown(null);
+            }
         };
         window.addEventListener('click', handler);
         return () => window.removeEventListener('click', handler);
@@ -845,7 +828,7 @@ export default function VideoStudio({ apiKey, onGenerationComplete, historyItems
                                 <div className="flex items-center gap-1.5 md:gap-2.5 relative flex-wrap">
 
                                     {/* Model btn */}
-                                    <div ref={modelBtnRef} className="relative">
+                                    <div className="relative">
                                         <ControlBtn
                                             icon={
                                                 <div className="w-5 h-5 bg-primary rounded-md flex items-center justify-center shadow-lg shadow-primary/20">
@@ -855,120 +838,132 @@ export default function VideoStudio({ apiKey, onGenerationComplete, historyItems
                                             label={selectedModelName}
                                             onClick={toggleDropdown('model')}
                                         />
-                                        <DropdownPanel type="model" open={openDropdown === 'model'} onClose={() => setOpenDropdown(null)}>
-                                            <ModelDropdown
-                                                imageMode={imageMode}
-                                                selectedModel={selectedModel}
-                                                onSelect={handleModelSelect}
-                                                onClose={() => setOpenDropdown(null)}
-                                            />
-                                        </DropdownPanel>
+                                        {openDropdown === 'model' && (
+                                            <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-[calc(100vw-3rem)] max-w-xs">
+                                                <ModelDropdown
+                                                    imageMode={imageMode}
+                                                    selectedModel={selectedModel}
+                                                    onSelect={handleModelSelect}
+                                                    onClose={() => setOpenDropdown(null)}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Aspect ratio btn */}
                                     {showAr && (
-                                        <div ref={arBtnRef} className="relative">
+                                        <div className="relative">
                                             <ControlBtn
                                                 icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60 text-secondary"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /></svg>}
                                                 label={selectedAr}
                                                 onClick={toggleDropdown('ar')}
                                             />
-                                            <DropdownPanel type="ar" open={openDropdown === 'ar'} onClose={() => setOpenDropdown(null)}>
-                                                <div className="text-[10px] font-bold text-muted uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Aspect Ratio</div>
-                                                <div className="flex flex-col gap-1">
-                                                    {getCurrentAspectRatios(selectedModel).map(r => (
-                                                        <div
-                                                            key={r}
-                                                            className="flex items-center justify-between p-3.5 hover:bg-white/5 rounded-2xl cursor-pointer transition-all group"
-                                                            onClick={(e) => { e.stopPropagation(); setSelectedAr(r); setOpenDropdown(null); }}
-                                                        >
-                                                            <div className="flex items-center gap-4">
-                                                                <div className="w-6 h-6 border-2 border-white/20 rounded-md shadow-inner flex items-center justify-center group-hover:border-primary/50 transition-colors">
-                                                                    <div className="w-3 h-3 bg-white/10 rounded-sm" />
+                                            {openDropdown === 'ar' && (
+                                                <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-52 max-w-[240px]">
+                                                    <div className="text-[10px] font-bold text-muted uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Aspect Ratio</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        {getCurrentAspectRatios(selectedModel).map(r => (
+                                                            <div
+                                                                key={r}
+                                                                className="flex items-center justify-between p-3.5 hover:bg-white/5 rounded-2xl cursor-pointer transition-all group"
+                                                                onClick={(e) => { e.stopPropagation(); setSelectedAr(r); setOpenDropdown(null); }}
+                                                            >
+                                                                <div className="flex items-center gap-4">
+                                                                    <div className="w-6 h-6 border-2 border-white/20 rounded-md shadow-inner flex items-center justify-center group-hover:border-primary/50 transition-colors">
+                                                                        <div className="w-3 h-3 bg-white/10 rounded-sm" />
+                                                                    </div>
+                                                                    <span className="text-xs font-bold text-white opacity-80 group-hover:opacity-100 transition-opacity">{r}</span>
                                                                 </div>
-                                                                <span className="text-xs font-bold text-white opacity-80 group-hover:opacity-100 transition-opacity">{r}</span>
+                                                                {selectedAr === r && <CheckSvg />}
                                                             </div>
-                                                            {selectedAr === r && <CheckSvg />}
-                                                        </div>
-                                                    ))}
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </DropdownPanel>
+                                            )}
                                         </div>
                                     )}
 
                                     {/* Duration btn */}
                                     {showDuration && (
-                                        <div ref={durationBtnRef} className="relative">
+                                        <div className="relative">
                                             <ControlBtn
                                                 icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60 text-secondary"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>}
                                                 label={`${selectedDuration}s`}
                                                 onClick={toggleDropdown('duration')}
                                             />
-                                            <DropdownPanel type="duration" open={openDropdown === 'duration'} onClose={() => setOpenDropdown(null)}>
-                                                <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Duration</div>
-                                                <div className="flex flex-col gap-1">
-                                                    {getCurrentDurations(selectedModel).map(d => (
-                                                        <DropdownItem key={d} label={`${d}s`} selected={selectedDuration === d} onClick={(e) => { e.stopPropagation(); setSelectedDuration(d); setOpenDropdown(null); }} />
-                                                    ))}
+                                            {openDropdown === 'duration' && (
+                                                <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-52 max-w-[240px]">
+                                                    <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Duration</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        {getCurrentDurations(selectedModel).map(d => (
+                                                            <DropdownItem key={d} label={`${d}s`} selected={selectedDuration === d} onClick={(e) => { e.stopPropagation(); setSelectedDuration(d); setOpenDropdown(null); }} />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </DropdownPanel>
+                                            )}
                                         </div>
                                     )}
 
                                     {/* Resolution btn */}
                                     {showResolution && (
-                                        <div ref={resolutionBtnRef} className="relative">
+                                        <div className="relative">
                                             <ControlBtn
                                                 icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60 text-secondary"><path d="M6 2L3 6v15a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" /></svg>}
                                                 label={selectedResolution || '720p'}
                                                 onClick={toggleDropdown('resolution')}
                                             />
-                                            <DropdownPanel type="resolution" open={openDropdown === 'resolution'} onClose={() => setOpenDropdown(null)}>
-                                                <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Resolution</div>
-                                                <div className="flex flex-col gap-1">
-                                                    {getCurrentResolutions(selectedModel).map(r => (
-                                                        <DropdownItem key={r} label={r} selected={selectedResolution === r} onClick={(e) => { e.stopPropagation(); setSelectedResolution(r); setOpenDropdown(null); }} />
-                                                    ))}
+                                            {openDropdown === 'resolution' && (
+                                                <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-52 max-w-[240px]">
+                                                    <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Resolution</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        {getCurrentResolutions(selectedModel).map(r => (
+                                                            <DropdownItem key={r} label={r} selected={selectedResolution === r} onClick={(e) => { e.stopPropagation(); setSelectedResolution(r); setOpenDropdown(null); }} />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </DropdownPanel>
+                                            )}
                                         </div>
                                     )}
 
                                     {/* Quality btn */}
                                     {showQuality && (
-                                        <div ref={qualityBtnRef} className="relative">
+                                        <div className="relative">
                                             <ControlBtn
                                                 icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60 text-secondary"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>}
                                                 label={selectedQuality || 'basic'}
                                                 onClick={toggleDropdown('quality')}
                                             />
-                                            <DropdownPanel type="quality" open={openDropdown === 'quality'} onClose={() => setOpenDropdown(null)}>
-                                                <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Quality</div>
-                                                <div className="flex flex-col gap-1">
-                                                    {getQualitiesForModel(getCurrentModels(), selectedModel).map(q => (
-                                                        <DropdownItem key={q} label={q} selected={selectedQuality === q} onClick={(e) => { e.stopPropagation(); setSelectedQuality(q); setOpenDropdown(null); }} />
-                                                    ))}
+                                            {openDropdown === 'quality' && (
+                                                <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-52 max-w-[240px]">
+                                                    <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Quality</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        {getQualitiesForModel(getCurrentModels(), selectedModel).map(q => (
+                                                            <DropdownItem key={q} label={q} selected={selectedQuality === q} onClick={(e) => { e.stopPropagation(); setSelectedQuality(q); setOpenDropdown(null); }} />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </DropdownPanel>
+                                            )}
                                         </div>
                                     )}
 
                                     {/* Mode btn */}
                                     {showMode && (
-                                        <div ref={modeBtnRef} className="relative">
+                                        <div className="relative">
                                             <ControlBtn
                                                 icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60 text-secondary"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>}
                                                 label={selectedMode || 'normal'}
                                                 onClick={toggleDropdown('mode')}
                                             />
-                                            <DropdownPanel type="mode" open={openDropdown === 'mode'} onClose={() => setOpenDropdown(null)}>
-                                                <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Mode</div>
-                                                <div className="flex flex-col gap-1">
-                                                    {getModesForModel(selectedModel).map(m => (
-                                                        <DropdownItem key={m} label={m} selected={selectedMode === m} onClick={(e) => { e.stopPropagation(); setSelectedMode(m); setOpenDropdown(null); }} />
-                                                    ))}
+                                            {openDropdown === 'mode' && (
+                                                <div ref={dropdownRef} onClick={e => e.stopPropagation()} className="absolute bottom-[calc(100%+8px)] left-0 z-50 bg-[#111] rounded-3xl p-3 border border-white/10 flex flex-col w-52 max-w-[240px]">
+                                                    <div className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 py-2 border-b border-white/5 mb-2">Mode</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        {getModesForModel(selectedModel).map(m => (
+                                                            <DropdownItem key={m} label={m} selected={selectedMode === m} onClick={(e) => { e.stopPropagation(); setSelectedMode(m); setOpenDropdown(null); }} />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </DropdownPanel>
+                                            )}
                                         </div>
                                     )}
                                 </div>
