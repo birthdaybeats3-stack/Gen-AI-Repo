@@ -54,8 +54,14 @@ export async function generateImage(apiKey, params) {
     if (params.aspect_ratio) payload.aspect_ratio = params.aspect_ratio;
     if (params.resolution) payload.resolution = params.resolution;
     if (params.quality) payload.quality = params.quality;
-    if (params.image_url) { payload.image_url = params.image_url; payload.strength = params.strength || 0.6; }
-    else payload.image_url = null;
+    if (params.image_url) { 
+        payload.image_url = params.image_url; 
+        payload.strength = params.strength || 0.6; 
+    } else if (params.images_list) {
+        payload.images_list = params.images_list;
+    } else {
+        payload.image_url = null;
+    }
     if (params.seed && params.seed !== -1) payload.seed = params.seed;
     return submitAndPoll(endpoint, payload, apiKey, params.onRequestId, 60);
 }

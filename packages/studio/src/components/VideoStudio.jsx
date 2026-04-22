@@ -446,6 +446,19 @@ export default function VideoStudio({
     }
   }, [applyControlsForModel, defaultModel.id]);
 
+  // ── Adjust height on load ────────────────────────────────────────────────
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (textareaRef.current) {
+        const el = textareaRef.current;
+        el.style.height = "auto";
+        const maxH = window.innerWidth < 768 ? 150 : 250;
+        el.style.height = Math.min(el.scrollHeight, maxH) + "px";
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
+
   // ── Persistence: Save ────────────────────────────────────────────────────
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -992,7 +1005,7 @@ export default function VideoStudio({
               return (
                 <div
                   key={entry.id || idx}
-                  className="relative group rounded-2xl overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
+                  className="relative group rounded-lg overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
                 >
                   <video
                     src={entry.url}

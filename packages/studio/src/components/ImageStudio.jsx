@@ -770,6 +770,7 @@ export default function ImageStudio({
   // ── Canvas / history state ──────────────────────────────────────────────
   const [currentImageUrl, setCurrentImageUrl] = useState(null);
   const [activeHistoryIdx, setActiveHistoryIdx] = useState(0);
+  const [batchSize, setBatchSize] = useState(1);
   const [localHistory, setLocalHistory] = useState([]); // [{id,url,prompt,model,aspect_ratio,timestamp}]
 
   // Use prop history if provided, otherwise local
@@ -806,11 +807,20 @@ export default function ImageStudio({
         if (data.maxImages) setMaxImages(data.maxImages);
         if (data.prompt) setPrompt(data.prompt);
         if (data.uploadedImageUrls) setUploadedImageUrls(data.uploadedImageUrls);
+        if (data.batchSize) setBatchSize(data.batchSize);
         if (data.localHistory) setLocalHistory(data.localHistory);
       }
     } catch (err) {
       console.warn("Failed to load ImageStudio persistence:", err);
     }
+  }, []);
+
+  // ── Adjust height on load ────────────────────────────────────────────────
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleTextareaInput();
+    }, 150);
+    return () => clearTimeout(timer);
   }, []);
 
   // ── Persistence: Save ────────────────────────────────────────────────────
@@ -826,6 +836,7 @@ export default function ImageStudio({
           maxImages,
           prompt,
           uploadedImageUrls,
+          batchSize,
           localHistory,
         };
         localStorage.setItem(PERSIST_KEY, JSON.stringify(state));
@@ -843,6 +854,7 @@ export default function ImageStudio({
     maxImages,
     prompt,
     uploadedImageUrls,
+    batchSize,
     localHistory,
   ]);
 
@@ -1014,50 +1026,53 @@ export default function ImageStudio({
     setGenerateError(null);
 
     try {
-      let res;
-      if (imageMode) {
-        const genParams = {
-          model: selectedModelId,
-          images_list: uploadedImageUrls,
-          image_url: uploadedImageUrls[0],
-          aspect_ratio: selectedAr,
-        };
-        if (prompt.trim()) genParams.prompt = prompt.trim();
-        if (currentQualityField && selectedQuality) {
-          genParams[currentQualityField] = selectedQuality;
-        }
-        res = await generateI2I(apiKey, genParams);
-      } else {
-        const genParams = {
-          model: selectedModelId,
-          prompt: prompt.trim(),
-          aspect_ratio: selectedAr,
-        };
-        if (currentQualityField && selectedQuality) {
-          genParams[currentQualityField] = selectedQuality;
-        }
-        res = await generateImage(apiKey, genParams);
-      }
+      const results = await Promise.all(
+        Array.from({ length: batchSize }).map(async () => {
+          if (imageMode) {
+            const genParams = {
+              model: selectedModelId,
+              images_list: uploadedImageUrls,
+              image_url: uploadedImageUrls[0],
+              aspect_ratio: selectedAr,
+            };
+            if (prompt.trim()) genParams.prompt = prompt.trim();
+            if (currentQualityField && selectedQuality) {
+              genParams[currentQualityField] = selectedQuality;
+            }
+            return await generateI2I(apiKey, genParams);
+          } else {
+            const genParams = {
+              model: selectedModelId,
+              prompt: prompt.trim(),
+              aspect_ratio: selectedAr,
+            };
+            if (currentQualityField && selectedQuality) {
+              genParams[currentQualityField] = selectedQuality;
+            }
+            return await generateImage(apiKey, genParams);
+          }
+        })
+      );
 
-      if (res && res.url) {
-        const entry = {
-          id: res.id || Date.now().toString(),
-          url: res.url,
-          prompt: prompt.trim(),
-          model: selectedModelId,
-          aspect_ratio: selectedAr,
-          timestamp: new Date().toISOString(),
-        };
-        addToHistory(entry);
-        onGenerationComplete?.({
-          url: res.url,
-          model: selectedModelId,
-          prompt: prompt.trim(),
-          type: "image",
-        });
-      } else {
-        throw new Error("No image URL returned by API");
-      }
+      results.forEach((res) => {
+        if (res && res.url) {
+          const entry = {
+            id: res.id || Math.random().toString(36).substring(7),
+            url: res.url,
+            prompt: prompt.trim(),
+            model: selectedModelId,
+            aspect_ratio: selectedAr,
+            timestamp: new Date().toISOString(),
+          };
+          addToHistory(entry);
+          onGenerationComplete?.({
+            url: res.url,
+            model: selectedModelId,
+            prompt: prompt.trim(),
+            type: "image",
+          });
+        }
+      });
     } catch (e) {
       console.error("[ImageStudio] Generation failed:", e);
       setGenerateError(e.message.slice(0, 80));
@@ -1325,6 +1340,24 @@ export default function ImageStudio({
                   )}
                 </div>
               )}
+
+              {/* Batch size selector */}
+              <div className="flex items-center gap-1 bg-white/[0.03] rounded-md p-1 border border-white/[0.03]">
+                {[1, 2, 3, 4].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setBatchSize(num)}
+                    className={`w-7 h-7 flex items-center justify-center rounded-md text-[10px] font-black transition-all ${
+                      batchSize === num
+                        ? "bg-[#d9ff00] text-black shadow-lg shadow-[#d9ff00]/20"
+                        : "text-white/40 hover:text-white/80 hover:bg-white/5"
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Generate button */}
