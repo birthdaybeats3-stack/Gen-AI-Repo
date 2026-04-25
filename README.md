@@ -32,10 +32,10 @@ One-click installers — no Node.js or terminal required.
 
 | Platform | Download |
 |---|---|
-| macOS Apple Silicon (M1/M2/M3/M4) | [Open Generative AI-1.0.2-arm64.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.2/Open.Generative.AI-1.0.2-arm64.dmg) |
-| macOS Intel (x64) | [Open Generative AI-1.0.2.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.2/Open.Generative.AI-1.0.2.dmg) |
-| Windows (x64 + ARM64) | [Open Generative AI Setup 1.0.2.exe](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.2/Open.Generative.AI.Setup.1.0.2.exe) |
-| Linux (Ubuntu x64) | Build locally with `npm run electron:build:linux` |
+| macOS Apple Silicon (M1/M2/M3/M4) | [Open Generative AI-1.0.7-arm64.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.7/Open.Generative.AI-1.0.7-arm64.dmg) |
+| macOS Intel (x64) | [Open Generative AI-1.0.7.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.7/Open.Generative.AI-1.0.7.dmg) |
+| Windows (x64) | See latest `.exe` on the [v1.0.6 release](https://github.com/Anil-matcha/Open-Generative-AI/releases/tag/v1.0.6) — v1.0.7 ships Mac-only; the v1.0.6 Windows build still works for local sd.cpp inference. |
+| Linux (Ubuntu x64) | See [v1.0.6 release](https://github.com/Anil-matcha/Open-Generative-AI/releases/tag/v1.0.6) for `.AppImage` and `.deb`, or build locally with `npm run electron:build:linux`. |
 
 All releases: [github.com/Anil-matcha/Open-Generative-AI/releases](https://github.com/Anil-matcha/Open-Generative-AI/releases)
 
