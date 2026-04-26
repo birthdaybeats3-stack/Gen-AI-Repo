@@ -1,15 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Open Generative AI — the free, open-source alternative to Higgsfield AI. Generate AI images and cinematic shots with 20+ models including Flux, SDXL, Ideogram, and Midjourney." />
-    <meta name="keywords" content="higgsfield ai, higgsfield alternative, open source higgsfield, ai image generator, ai cinema studio, flux ai, ai video generation, free higgsfield, open source ai image generation" />
-    <title>Open Generative AI — Free Open-Source Alternative to Higgsfield AI</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<title>BirthdayBeats</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    text-align:center;
+    padding:50px;
+    color:#333;
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    max-width:600px;
+    margin:auto;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+h1{
+    font-size:40px;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:6px;
+    background:#ff4d6d;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e63956;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+<h1>🎂 BirthdayBeats 🎵</h1>
+<p>Generate AI-powered birthday music and messages.</p>
+
+<input id="name" placeholder="Enter a name" />
+<br><br>
+
+<button onclick="generate()">Generate Message</button>
+
+<p id="result"></p>
+</div>
+
+<script>
+function generate(){
+    const name = document.getElementById("name").value;
+    if(!name){
+        document.getElementById("result").innerText="Please enter a name.";
+        return;
+    }
+
+    document.getElementById("result").innerText =
+        "🎉 Happy Birthday " + name + "! May your day be filled with music and joy!";
+}
+</script>
+
+</body>
 </html>
