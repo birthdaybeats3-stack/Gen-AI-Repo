@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Studio - Open Generative AI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #0f172a; color: white; }
+        header { padding: 40px 20px; background: linear-gradient(135deg, #6366f1, #22d3ee); text-align: center; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 30px; }
+        input[type="text"] { flex: 1; padding: 15px; border-radius: 8px; border: none; font-size: 16px; }
+        button { padding: 15px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #4f46e5; }
+        .result-area { background: #1e293b; padding: 40px; border-radius: 12px; text-align: center; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #22d3ee; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎨 Image Studio</h1>
+        <p>Generate stunning images from text prompts using AI</p>
+    </header>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        
+        <div class="input-group">
+            <input type="text" id="promptInput" placeholder="Describe the image you want to generate (e.g., 'A cyberpunk city at night')...">
+            <button onclick="generateImage()">Generate</button>
+        </div>
+
+        <div class="result-area" id="resultArea">
+            <p style="opacity: 0.6;">Your generated image will appear here...</p>
+        </div>
+    </div>
+
+    <script>
+        function generateImage() {
+            const prompt = document.getElementById('promptInput').value;
+            const resultArea = document.getElementById('resultArea');
+            
+            if (!prompt) {
+                alert("Please enter a prompt!");
+                return;
+            }
+
+            resultArea.innerHTML = '<p>Generating... (This is a demo interface. Connect MuAPI CLI backend to enable real generation.)</p>';
+            
+            // TODO: Integrate MuAPI CLI fetch call here
+            // Example: fetch('/api/generate', { method: 'POST', body: JSON.stringify({ prompt }) })
+            
+            setTimeout(() => {
+                resultArea.innerHTML = `<p>Simulated Result for: "<strong>${prompt}</strong>"</p><p style="color:#22d3ee">[Image Placeholder]</p>`;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
