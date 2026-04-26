@@ -250,6 +250,18 @@ export default function StandaloneShell() {
             </div>
             <span className="text-sm font-bold tracking-tight hidden sm:block">OpenGenerativeAI</span>
           </div>
+          
+          {/* Projects Quick Link */}
+          <button
+            onClick={() => router.push('/projects')}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/10 bg-white/5 text-[13px] font-bold text-white/80 hover:text-white hover:bg-white/10 hover:border-white/20 transition-colors"
+            title="View all projects"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span className="hidden sm:inline">Projects</span>
+          </button>
 
           {/* Center: Navigation */}
           <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">

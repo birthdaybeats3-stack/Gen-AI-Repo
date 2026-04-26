@@ -1,75 +1,333 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>BirthdayBeats</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Open Generative AI — the free, open-source alternative to Higgsfield AI. Generate AI images and cinematic shots with 20+ models including Flux, SDXL, Ideogram, and Midjourney." />
+    <meta name="keywords" content="higgsfield ai, higgsfield alternative, open source higgsfield, ai image generator, ai cinema studio, flux ai, ai video generation, free higgsfield, open source ai image generation" />
+    <title>Open Generative AI — Free Open-Source Alternative to Higgsfield AI</title>
+    <style>
+      :root {
+        --primary: #6366f1;
+        --secondary: #a855f7;
+        --dark: #0f172a;
+        --light: #f8fafc;
+        --card-bg: #1e293b;
+        --text-gray: #94a3b8;
+      }
 
-<style>
-body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-    text-align:center;
-    padding:50px;
-    color:#333;
-}
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-.container{
-    background:white;
-    padding:40px;
-    border-radius:12px;
-    max-width:600px;
-    margin:auto;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
+      body {
+        background-color: var(--dark);
+        color: var(--light);
+        line-height: 1.6;
+      }
 
-h1{
-    font-size:40px;
-}
+      /* Header */
+      header {
+        background: rgba(15, 23, 42, 0.95);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid #334155;
+        backdrop-filter: blur(10px);
+      }
 
-button{
-    padding:12px 25px;
-    border:none;
-    border-radius:6px;
-    background:#ff4d6d;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
+      nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-button:hover{
-    background:#e63956;
-}
-</style>
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
 
-</head>
+      .nav-links a {
+        color: var(--light);
+        text-decoration: none;
+        margin-left: 2rem;
+        transition: color 0.3s;
+      }
 
-<body>
+      .nav-links a:hover {
+        color: var(--primary);
+      }
 
-<div class="container">
-<h1>🎂 BirthdayBeats 🎵</h1>
-<p>Generate AI-powered birthday music and messages.</p>
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        padding: 6rem 2rem;
+        background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+      }
 
-<input id="name" placeholder="Enter a name" />
-<br><br>
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
 
-<button onclick="generate()">Generate Message</button>
+      .hero p {
+        font-size: 1.25rem;
+        color: var(--text-gray);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+      }
 
-<p id="result"></p>
-</div>
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
 
-<script>
-function generate(){
-    const name = document.getElementById("name").value;
-    if(!name){
-        document.getElementById("result").innerText="Please enter a name.";
-        return;
-    }
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+      }
 
-    document.getElementById("result").innerText =
-        "🎉 Happy Birthday " + name + "! May your day be filled with music and joy!";
-}
-</script>
+      /* Studios Grid */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+      }
 
-</body>
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #334155;
+        cursor: pointer;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border-color: var(--primary);
+      }
+
+      .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--light);
+      }
+
+      .card p {
+        color: var(--text-gray);
+        margin-bottom: 1.5rem;
+      }
+
+      .card-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* CLI Section */
+      .cli-section {
+        background: #1e293b;
+        border-radius: 1rem;
+        padding: 3rem;
+        margin-top: 4rem;
+        border: 1px solid #334155;
+      }
+
+      .code-block {
+        background: #0f172a;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: 'Courier New', Courier, monospace;
+        color: #a5b4fc;
+        margin: 1.5rem 0;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-gray);
+        border-top: 1px solid #334155;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        
+        nav {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .nav-links a {
+          margin: 0 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">Open Gen AI</div>
+        <div class="nav-links">
+          <a href="#studios">Studios</a>
+          <a href="#cli">CLI Tools</a>
+          <a href="https://github.com/birthdaybeats3-stack/Gen-AI-Repo" target="_blank">GitHub</a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>Next-Gen AI Content Creation</h1>
+      <p>A comprehensive suite of open-source tools for generating images, videos, audio, and managing AI workflows directly from your browser or terminal.</p>
+      <a href="#studios" class="cta-button">Explore Studios</a>
+    </section>
+
+    <div class="container" id="studios">
+      <h2 class="section-title">AI Studios</h2>
+      <div class="grid">
+        <!-- Image Studio -->
+        <div class="card">
+          <div class="card-icon">🎨</div>
+          <h3>Image Studio</h3>
+          <p>Generate stunning images from text prompts using Flux, Midjourney, and other state-of-the-art models.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+
+        <!-- Video Studio -->
+        <div class="card">
+          <div class="card-icon">🎬</div>
+          <h3>Video Studio</h3>
+          <p>Create amazing videos from text or images with Kling, Veo, and Runway models.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+
+        <!-- Audio Studio -->
+        <div class="card">
+          <div class="card-icon">🎵</div>
+          <h3>Audio Studio</h3>
+          <p>Generate music, voiceovers, and sound effects with Suno and MMAudio.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+
+        <!-- Lip Sync Studio -->
+        <div class="card">
+          <div class="card-icon">👄</div>
+          <h3>Lip Sync Studio</h3>
+          <p>Synchronize audio to video perfectly for talking heads and animations.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+
+        <!-- Cinema Studio -->
+        <div class="card">
+          <div class="card-icon">🎥</div>
+          <h3>Cinema Studio</h3>
+          <p>Advanced video editing, effects, and cinematic enhancements.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+
+        <!-- Marketing Studio -->
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h3>Marketing Studio</h3>
+          <p>Create engaging marketing content, ads, and social media posts instantly.</p>
+          <a href="#" class="card-link">Launch Studio →</a>
+        </div>
+      </div>
+
+      <!-- CLI Section -->
+      <div class="cli-section" id="cli">
+        <h2 style="margin-bottom: 1rem;">⌨️ MuAPI CLI Integration</h2>
+        <p>Prefer the terminal? Use our powerful command-line interface for automation and scripting.</p>
+        
+        <div class="code-block">
+# Install globally
+npm install -g muapi-cli
+
+# Generate an image
+muapi image generate "cyberpunk city" --model flux-dev
+
+# Create a video
+muapi video generate "dog running on beach" --model kling-master
+        </div>
+        
+        <a href="docs/muapi-cli-tutorial.md" class="card-link">View Full CLI Documentation →</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Open Generative AI. Built with ❤️ for the AI community.</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+        <a href="https://github.com/birthdaybeats3-stack/Gen-AI-Repo" style="color: var(--primary); text-decoration: none;">View Source on GitHub</a>
+      </p>
+    </footer>
+
+    <script>
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      // Simple interaction for cards (placeholder for future functionality)
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const title = card.querySelector('h3').textContent;
+          alert(`${title} is coming soon! Check back later for updates.`);
+        });
+      });
+    </script>
+    
+    <!-- Keep the original app mount for React/Vite -->
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
